@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Job Scheduler</title>
+<link href="/static/favicon.ico" type="image/x-icon" rel="shortcut icon">
+<link rel="stylesheet" href="/css/bootstrap.min.css">
+<style type="text/css">
+	.btnRun, .btnPause, .btnResume, .btnEdit {margin-right: 8px;}
+	.input-group {margin-bottom: 5px;}
+	.title {text-align:center; font-size:30px; margin-top:15px;}
+	.btnCreate {text-align:right; margin:5px 15px;}
+	.head {border:solid; border-color:#8080805c; border-width:1px;}
+	.line {
+	    border: 0;
+	    height: 1px;
+	    background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.23), rgba(0, 0, 0, 0));
+	}
+</style>
+</head>
+<body style="background-color:rgb(225, 245, 192);">
+
+	<div class="container-fluid" style="padding-top: 15px;">
+	    
+	    <div class="head">
+	    	<div class="title">JOB MANAGEMENT CONSOLE</div>
+	    	<hr class="line">
+	        <div class="btnCreate">
+				<button type="button" class="btn btn-primary" id="createBtn" data-toggle="modal">Create</button>
+		    </div>
+		</div>
+		
+		
+		
+		<table class="table table-bordered">
+			<thead>
+				<tr class="active">
+					<th>Id</th>
+					<th>Name</th>
+					<th>Group</th>
+					<th>Crons</th>
+					<th>State</th>
+					<th>Description</th>
+					<!-- <th>interface</th> -->
+					<th style="text-align: center;">Operation</th>
+				</tr>
+			</thead>
+			<tbody  th:each="item : ${jobs}">
+				<tr th:attr="data-id=${item.jobId}">
+					<td th:text="${item.jobId}"></td>
+					<td th:id="${'name_' + item.jobId}" th:text="${item.jobName}"></td>
+					<td th:id="${'group_' + item.jobId}" th:text="${item.jobGroup}"></td>
+					<td th:id="${'cron_' + item.jobId}" th:text="${item.cronExpression}"></td>
+					<td th:id="${'status_' + item.jobId}" th:text="${item.jobStatus}"></td>
+					<td th:id="${'desc_' + item.jobId}" th:text="${item.desc}"></td>
+					<!-- <td>$!item.interfaceName</td> -->
+					<td style="text-align: center;">
+						<div class="btn-group text-center" role="group"
+							th:attr="data-id=${item.jobId}">
+							<button type="button" class="btn btn-default btnRun">Run Once</button>
+							<button type="button" class="btn btn-default btnPause">Pause</button>
+							<button type="button" class="btn btn-default btnResume">Resume</button>
+							<button type="button" class="btn btn-default btnEdit">Edit</button>
+							<button type="button" class="btn btn-warning btnDelete">Delete</button>
+						</div>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+					<h4 class="modal-title" id="myModalLabel">Cron Create</h4>
+				</div>
+				<div class="modal-body">
+					<form id="mainForm" action="">
+						<div>
+							<input type="hidden" class="form-control" id="jobId" name="jobId" />
+							<div class="input-group">
+								<span class="input-group-addon">Job Name</span> 
+								<input type="text" alias="no-edit" name="jobName" class="form-control" id="edit_name" />
+							</div>
+							<div class="input-group">
+								<span class="input-group-addon">Job Group</span> 
+								<input type="text" alias="no-edit" name="jobGroup" class="form-control" id="edit_group" />
+							</div>
+							<div class="input-group">
+								<span class="input-group-addon">Cron Expression</span> 
+								<input type="text" alias="no-edit" name="cronExpression" class="form-control" id="edit_cron" />
+							</div>
+							<div class="input-group">
+								<span class="input-group-addon">Job Status</span> 
+								<select id="edit_status" disabled="disabled" name="jobStatus" class="form-control" data-size="10">
+									<option value=""></option>
+									<option value="NORMAL">NORMAL</option>
+									<option value="PAUSED">PAUSED</option>
+								</select>
+							</div>
+							<div class="input-group">
+								<span class="input-group-addon">Job Description</span> 
+								<input type="text" alias="no-edit" name="desc" class="form-control" id="edit_desc" />
+							</div>
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+					<button type="button" class="btn btn-primary" id="save">Save</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script type="text/javascript" src="/js/jquery.min.js"></script>
+	<script type="text/javascript" src="/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="/js/bootstrap-select.min.js"></script>
+	<script type="text/javascript" src="/js/index.js"></script>
+</body>
+</html>
